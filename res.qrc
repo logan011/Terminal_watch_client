@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>1.jpeg</file>
+        <file>2</file>
+        <file>11.jpg</file>
+        <file>vart.jpg</file>
+        <file>money.jpg</file>
+        <file>bank.jpg</file>
+        <file>water.jpg</file>
+    </qresource>
+    <qresource prefix="/new/prefix2">
+        <file>power.jpg</file>
+    </qresource>
+</RCC>
