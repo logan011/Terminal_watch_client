@@ -18,11 +18,11 @@ void Bank::dragEnterEvent(QDragEnterEvent *pe)
 void Bank::dropEvent(QDropEvent *)
 {
     QMediaPlayer *player = new QMediaPlayer;
-    player->setMedia(QUrl::fromLocalFile("/home/roman/untitled1/Moneta.mp3"));
+    player->setMedia(QUrl::fromLocalFile("/home/roman/QtProject/TerminalWatchClient_/Moneta.mp3"));
     player->setVolume(100);
     player->play();
     setAcceptDrops(false);
-    emit signalMoneyDropped(countMoney++);
+    emit signalMoneyDropped(++countMoney);
 
 }
 

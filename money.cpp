@@ -4,6 +4,7 @@
 #include <QApplication>
 Money::Money(QWidget *parent):QGraphicsView(parent)
 {
+    //roman
     QGraphicsScene  *scene= new QGraphicsScene();
     QPixmap rt;
     if(!rt.load(":/new/prefix1/money.jpg"))

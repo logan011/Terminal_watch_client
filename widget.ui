@@ -107,39 +107,13 @@
      </sizepolicy>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>60</y>
-      <width>85</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Power</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_2">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>60</y>
-      <width>111</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Open/Close</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>90</y>
+      <y>80</y>
       <width>121</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -160,9 +134,9 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>90</y>
+      <y>80</y>
       <width>80</width>
-      <height>23</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
