@@ -11,35 +11,21 @@ namespace Ui {
 class Widget;
 }
 enum {Money_Dropped,Power,Carry_on,Disconnected,First_packet,Options};
-struct Option;
 struct date{
     date(){Temprete = 20.0;Water_left = 50000;volt5 = 4;volt12 = 11; CountMoney =0; power = carry_on = false,ID = msg= -1;timesale= timewater = "";}
-    void setstruct(int message =-1,quint16 id=-1,double temp=20, double water=50000.0,quint16 money=0,QString t = "" ) {
+    void setstruct(int message,double Temp, double Water, double Vol5, double Vol12, int Mon, bool Power, bool Carry, int Id,QString TimeS, QString TimeW) {
         this->msg = message;
-        this->Temprete = temp;
-        this->Water_left = water;
-        this->CountMoney = money;
-        this->ID = id;
-        this->timesale = t;
-        //
-
+        this->Temprete = Temp;
+        this->Water_left = Water;
+        this->volt5 = Vol5;
+        this->volt12 = Vol12;
+        this->CountMoney = Mon;
+        this->power = Power;
+        this->carry_on = Carry;
+        this->ID = Id;
+        this->timesale = TimeS;
+        this->timewater = TimeW;
     }
-    void setstructoption(int message = -1, quint16 id = -1, bool pow = false, bool carry = false,bool water = false,double vol12 = 0.0, double vol5 = 0.0,QString t= "")
-    {
-        this->msg = message;
-        this->ID = id;
-        this->power = pow;
-        this->carry_on = carry;
-        if(water)
-        {
-        this->timewater = t;
-          this->Water_left = 50000;
-        }
-        this->volt5 = vol5;
-        this->volt12 = vol12;
-
-    }
-
     double Temprete,Water_left,volt12,volt5;
     quint16 CountMoney;
     bool power, carry_on;
@@ -62,7 +48,7 @@ public slots:
     void slotsendtoserver();
     void slotsendtoserver(int);
     void slotsendstruct();
-    void slotsavedata(Option *op);
+    void slotsavedata(date *op);
 protected:
     void closeEvent(QCloseEvent *event);
 signals:
@@ -76,6 +62,4 @@ private:
      QTime *time;
      QDate *Date;
 };
-
-
 #endif // WIDGET_H

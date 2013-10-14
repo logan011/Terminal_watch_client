@@ -8,7 +8,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->pushButton,SIGNAL(clicked()),this, SLOT(close()));
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(slotSaveData()));
-    option = new Option();
+    optiondata = new date();
 }
 void Dialog::slotShowDialog()
 {
@@ -16,14 +16,16 @@ void Dialog::slotShowDialog()
 }
 void Dialog::slotSaveData()
 {
-    option->power = ui->checkBox->isChecked();
-    option->carry_on = ui->checkBox_2->isChecked();
-    option->water = ui->checkBox_3->isChecked();
+    optiondata->power = ui->checkBox->isChecked();
+    optiondata->carry_on = ui->checkBox_2->isChecked();
     if(ui->checkBox_3->isChecked())
-        option->t = QTime::currentTime().toString() +"/" + QDate::currentDate().toString(Qt::SystemLocaleShortDate);
-    option->volt5 = ui->doubleSpinBox->value();
-    option->volt12 = ui->doubleSpinBox_2->value();
-    emit sendtomain(option);
+    {
+        optiondata->timewater = QTime::currentTime().toString() +"/" + QDate::currentDate().toString(Qt::SystemLocaleShortDate);
+        optiondata->Water_left = 50000;
+    }
+    optiondata->volt5 = ui->doubleSpinBox->value();
+    optiondata->volt12= ui->doubleSpinBox_2->value();
+    emit sendtomain(optiondata);
     ui->checkBox_3->setChecked(false);
 }
 

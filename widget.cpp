@@ -30,18 +30,21 @@ Widget::Widget(QWidget *parent) :
     connect(ui->label,SIGNAL(signalMoneyDropped(int)),this,SLOT(showWater()));
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(hideWater()));
     connect(ui->pushButton_3,SIGNAL(clicked()),subdialog,SLOT(slotShowDialog()));
-    connect(subdialog,SIGNAL(sendtomain(Option*)),this,SLOT(slotsavedata(Option*)));
+    connect(subdialog,SIGNAL(sendtomain(date*)),this,SLOT(slotsavedata(date*)));
     emit ui->pushButton->clicked(true);
 }
-void Widget::slotsavedata(Option *op)
+void Widget::slotsavedata(date *op)
 {
-    dataToSend.setstructoption(Options,Id,op->power,op->carry_on,op->water,op->volt12, op->volt5,op->t);
+    if(op->timewater != "")
+        dataToSend.Water_left = op->Water_left;
+    dataToSend.setstruct(Options,dataToSend.Temprete,dataToSend.Water_left,op->volt5,op->volt12,dataToSend.CountMoney,op->power,
+                         op->carry_on,dataToSend.ID,dataToSend.timesale,op->timewater);
     QByteArray data = serialize(dataToSend);
     socket->write(data);
 }
 void Widget::slotsendstruct()
 {
-    dataToSend.setstruct(Money_Dropped,Id,20,50000,0);
+    dataToSend.setstruct(Money_Dropped,20,50000,4,11,0,false,false,Id,"","");
     QByteArray data = serialize(dataToSend);
     socket->write(data);
 }
@@ -63,13 +66,16 @@ void Widget::showWater()
 }
 void Widget::slotsendtoserver()
 {
-   dataToSend.setstruct(Disconnected,Id);
+   dataToSend.setstruct(Disconnected,dataToSend.Temprete,dataToSend.Water_left,dataToSend.volt5,dataToSend.volt12,dataToSend.CountMoney,dataToSend.power,
+                        dataToSend.carry_on,dataToSend.ID,dataToSend.timesale,dataToSend.timewater);
     QByteArray data = serialize(dataToSend);
     socket->write(data);
 }
 void Widget::slotsendtoserver(int countmoney)
 {
-    dataToSend.setstruct(Money_Dropped,Id,20,dataToSend.Water_left -=250.0,countmoney,time->currentTime().toString()+":"+ Date->currentDate().toString(Qt::SystemLocaleShortDate));
+    dataToSend.setstruct(Money_Dropped,20,dataToSend.Water_left-=250.0,dataToSend.volt5,dataToSend.volt12,countmoney,dataToSend.power,
+                         dataToSend.carry_on,Id,time->currentTime().toString()+":"+ Date->currentDate().toString(Qt::SystemLocaleShortDate),"");
+   // dataToSend.setstruct(Money_Dropped,Id,20,dataToSend.Water_left -=250.0,countmoney,time->currentTime().toString()+":"+ Date->currentDate().toString(Qt::SystemLocaleShortDate));
     QByteArray data = serialize(dataToSend);
     socket->write(data);
 
