@@ -10,7 +10,7 @@
 namespace Ui {
 class Widget;
 }
-enum {Money_Dropped,Power,Carry_on,Disconnected,First_packet,Options};
+enum {Money_Dropped,Disconnected,Options};
 struct date{
     date(){Temprete = 20.0;Water_left = 50000;volt5 = 4;volt12 = 11; CountMoney =0; power = carry_on = false,ID = msg= -1;timesale= timewater = "";}
     void setstruct(int message,double Temp, double Water, double Vol5, double Vol12, int Mon, bool Power, bool Carry, int Id,QString TimeS, QString TimeW) {

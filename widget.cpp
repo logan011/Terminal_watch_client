@@ -24,6 +24,7 @@ Widget::Widget(QWidget *parent) :
     //client connection
     connect(socket,SIGNAL(readyRead()),this,SLOT(slotreadfromserver()));
     connect(this,SIGNAL(signalclosewindow()),this,SLOT(slotsendtoserver()));
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(close()));
     connect(ui->label,SIGNAL(signalMoneyDropped(int)),this,SLOT(slotsendtoserver(int)));
     connect(this,SIGNAL(signalsenttoserver()),this,SLOT(slotsendstruct()));
     //other connection
@@ -52,8 +53,13 @@ void Widget::slotsendstruct()
 void Widget::slotreadfromserver()
 {
      Id = socket->readAll().toInt();
+     if(Id == 911)
+         emit this->close();
+     else
+     {
     this->setWindowTitle("Client "+QString::number(Id));
     emit signalsenttoserver();
+     }
 }
 void Widget::showWater()
 {
