@@ -40,7 +40,6 @@ public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
 private:
-        date &deserialize(QByteArray array,date &dest);
     QByteArray serialize(date packet);
 public slots:
     void showWater();

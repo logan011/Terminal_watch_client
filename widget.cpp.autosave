@@ -102,23 +102,6 @@ QByteArray Widget::serialize(date packet)
     out<<packet.timesale;
     return data;
 }
-date &Widget::deserialize(QByteArray array,date &dest)
-{
-    QDataStream stream(&array,QIODevice::ReadOnly);
-    stream.setVersion(QDataStream::Qt_4_5);
-    stream >> dest.ID;
-       stream >> dest.CountMoney;
-       stream>> dest.power;
-       stream>>dest.carry_on;
-      stream>>dest.Temprete;
-       stream>>dest.Water_left;
-       stream>>dest.volt5;
-       stream>>dest.volt12;
-       stream>>dest.msg;
-       stream>>dest.timewater;
-       stream>>dest.timesale;
-       return dest;
-}
 void Widget::hideWater()
 {
     ui->label->setAcceptDrops(true);
