@@ -21,25 +21,26 @@ Widget::Widget(QWidget *parent) :
     ui->textBrowser->setReadOnly(true);
     ui->textBrowser->setTextColor(Qt::black);
     ui->textBrowser->setHtml("<H3><center>Ready for work..</center></H3>");
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(hideWater()));
+    emit ui->pushButton->clicked(true);
     //client connection
     connect(socket,SIGNAL(readyRead()),this,SLOT(slotreadfromserver()));
     connect(this,SIGNAL(signalclosewindow()),this,SLOT(slotsendtoserver()));
     connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(close()));
-    connect(ui->label,SIGNAL(signalMoneyDropped(int)),this,SLOT(slotsendtoserver(int)));
+    connect(ui->bank,SIGNAL(signalMoneyDropped(int)),this,SLOT(slotsendtoserver()));
     connect(this,SIGNAL(signalsenttoserver()),this,SLOT(slotsendstruct()));
     connect(socket,SIGNAL(disconnected()),this,SLOT(close()));
     //other connection
-    connect(ui->label,SIGNAL(signalMoneyDropped(int)),this,SLOT(showWater()));
-    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(hideWater()));
+    connect(ui->bank,SIGNAL(signalMoneyDropped(int)),this,SLOT(showWater()));
     connect(ui->pushButton_3,SIGNAL(clicked()),subdialog,SLOT(slotShowDialog()));
     connect(subdialog,SIGNAL(sendtomain(date*)),this,SLOT(slotsavedata(date*)));
-    emit ui->pushButton->clicked(true);
+
 }
 void Widget::slotsavedata(date *op)
 {
     if(op->timewater != "")
         dataToSend.Water_left = op->Water_left;
-    dataToSend.setstruct(Options,dataToSend.Temprete,dataToSend.Water_left,op->volt5,op->volt12,dataToSend.CountMoney,op->power,
+    dataToSend.setstruct(Options,op->Temprete,dataToSend.Water_left,op->volt5,op->volt12,op->CountMoney,op->power,
                          op->carry_on,dataToSend.ID,dataToSend.timesale,op->timewater);
     QByteArray data = serialize(dataToSend);
     socket->write(data);
@@ -52,7 +53,6 @@ void Widget::slotsendstruct()
 }
 void Widget::slotreadfromserver()
 {
-    //dataToSend = deserialize(socket->readAll(),dataToSend);
      Id = socket->readAll().toInt();
     if(Id != -1)
    {
@@ -71,19 +71,14 @@ void Widget::showWater()
 }
 void Widget::slotsendtoserver()
 {
+    if(qobject_cast<QObject*>(QObject::sender())->objectName() == "bank")
+        dataToSend.setstruct(Money_Dropped,dataToSend.Temprete,dataToSend.Water_left-=250.0,dataToSend.volt5,dataToSend.volt12,++dataToSend.CountMoney,dataToSend.power,
+                             dataToSend.carry_on,Id,time->currentTime().toString()+"   "+ Date->currentDate().toString(Qt::SystemLocaleShortDate),"");
+    else
    dataToSend.setstruct(Disconnected,dataToSend.Temprete,dataToSend.Water_left,dataToSend.volt5,dataToSend.volt12,dataToSend.CountMoney,dataToSend.power,
                         dataToSend.carry_on,dataToSend.ID,dataToSend.timesale,dataToSend.timewater);
     QByteArray data = serialize(dataToSend);
     socket->write(data);
-}
-void Widget::slotsendtoserver(int countmoney)
-{
-    dataToSend.setstruct(Money_Dropped,20,dataToSend.Water_left-=250.0,dataToSend.volt5,dataToSend.volt12,countmoney,dataToSend.power,
-                         dataToSend.carry_on,Id,time->currentTime().toString()+":"+ Date->currentDate().toString(Qt::SystemLocaleShortDate),"");
-   // dataToSend.setstruct(Money_Dropped,Id,20,dataToSend.Water_left -=250.0,countmoney,time->currentTime().toString()+":"+ Date->currentDate().toString(Qt::SystemLocaleShortDate));
-    QByteArray data = serialize(dataToSend);
-    socket->write(data);
-
 }
 QByteArray Widget::serialize(date packet)
 {
@@ -102,26 +97,9 @@ QByteArray Widget::serialize(date packet)
     out<<packet.timesale;
     return data;
 }
-date &Widget::deserialize(QByteArray array,date &dest)
-{
-    QDataStream stream(&array,QIODevice::ReadOnly);
-    stream.setVersion(QDataStream::Qt_4_5);
-    stream >> dest.ID;
-       stream >> dest.CountMoney;
-       stream>> dest.power;
-       stream>>dest.carry_on;
-      stream>>dest.Temprete;
-       stream>>dest.Water_left;
-       stream>>dest.volt5;
-       stream>>dest.volt12;
-       stream>>dest.msg;
-       stream>>dest.timewater;
-       stream>>dest.timesale;
-       return dest;
-}
 void Widget::hideWater()
 {
-    ui->label->setAcceptDrops(true);
+    ui->bank->setAcceptDrops(true);
     ui->pushButton->setGeometry(170,1,179,1);
     ui->textBrowser->setHtml("<H3><center>Ready for work..</center></H3>");
 }
